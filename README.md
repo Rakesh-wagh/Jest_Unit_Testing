@@ -1,70 +1,52 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+<?php
+require_once(__DIR__ . '/globals.php');
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require_once(__DIR__ . '/../vendor/phpmailer/phpmailer/src/PHPMailer.php');
+require_once(__DIR__ . '/../vendor/phpmailer/phpmailer/src/Exception.php');
+require_once(__DIR__ . '/../vendor/phpmailer/phpmailer/src/SMTP.php');
 
-In the project directory, you can run:
+$mail = new PHPMailer(true);
 
-### `npm start`
+try {
+    $mail->isSMTP();
+    $mail->Host       = $GLOBALS['email_smtp_host'];
+    $mail->SMTPAuth   = true;
+    $mail->Username   = $GLOBALS['email_smtp_user'];
+    $mail->Password   = $GLOBALS['email_smtp_pass'];
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port       = $GLOBALS['email_smtp_port'];
+    $mail->SMTPDebug = 4; 
+    $mail->SMTPOptions = [
+    'socket' => [
+        'bindto' => '0.0.0.0:0', // IPv4 only
+    ],
+];
+$mail->Debugoutput = 'html';
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+    $mail->setFrom($GLOBALS['email_address'], 'OpenEMR Test');
+    $mail->addAddress('rakeshw@cybage.com');
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+    $mail->Subject = 'Test Email from OpenEMR';
+    $mail->Body    = 'This is a test email from OpenEMR SMTP configuration.';
 
-### `npm test`
+    $mail->send();
+    echo 'Test email sent successfully.';
+} catch (Exception $e) {
+    echo "Email failed: {$mail->ErrorInfo}";
+}
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+$GLOBALS['email_enable_smtp'] = true;
+$GLOBALS['email_smtp_host'] = 'smtp.gmail.com';
+$GLOBALS['email_smtp_port'] = 587;
+$GLOBALS['email_smtp_user'] = 'befitjournal1@gmail.com';
+$GLOBALS['email_smtp_pass'] = 'pfmgwkataeqevcdc';
+$GLOBALS['email_smtp_auth'] = true;
+$GLOBALS['email_smtp_secure'] = 'tls';
+$GLOBALS['email_address'] = 'befitjournal1@gmail.com';
+$GLOBALS['email_from_name'] = 'Openemr';
